@@ -1,15 +1,15 @@
-import { RouterProvider } from "react-router-dom"
-import { router } from "./routes"
-import { ThemeProvider } from "./components/theme-provider"
-import { Helmet, HelmetProvider } from "react-helmet-async"
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes";
+import { ThemeProvider } from "./components/ui/theme/theme-provider";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 export function App() {
   return (
     <HelmetProvider>
-      <ThemeProvider storageKey="myfinanceflow.theme" defaultTheme="dark">
+      <ThemeProvider storageKey="myfinanceflow.theme" defaultTheme="system">
         <Helmet titleTemplate="%s | MyFinanceFlow" />
         <RouterProvider router={router} />
       </ThemeProvider>
     </HelmetProvider>
-  )
+  );
 }
