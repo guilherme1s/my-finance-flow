@@ -6,7 +6,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 export function App() {
   return (
     <HelmetProvider>
-      <ThemeProvider storageKey="myfinanceflow.theme" defaultTheme="system">
+      <ThemeProvider storageKey="myfinanceflow.theme" defaultTheme="light">
         <Helmet titleTemplate="%s | MyFinanceFlow" />
         <RouterProvider router={router} />
       </ThemeProvider>
