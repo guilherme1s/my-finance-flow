@@ -13,7 +13,7 @@ import { ProfileMenu } from "./profile-menu";
 
 export function Header() {
   return (
-    <header className="w-440:px-0 border-b border-border bg-background px-6">
+    <header className="border-b border-border bg-background px-6 min-[1720px]:px-0">
       <div className="mx-auto flex w-full max-w-430 items-center justify-between py-4">
         <div className="flex items-center gap-4">
           <NavLink to="/" className="flex items-center gap-2">
@@ -58,7 +58,7 @@ export function Header() {
                   <User size={20} />
                 </span>
 
-                <div className="hidden md:flex items-center gap-2">
+                <div className="hidden items-center gap-2 md:flex">
                   John Doe
                   <ChevronDown size={16} />
                 </div>

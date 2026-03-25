@@ -34,7 +34,7 @@ export function Dashboard() {
   ];
 
   return (
-    <div className="w-440:px-0 mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4">
+    <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
       <Helmet title="Dashboard" />
       <header className="mt-4 w-full">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
