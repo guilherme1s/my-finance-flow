@@ -34,15 +34,13 @@ export function Dashboard() {
   ];
 
   return (
-    <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 py-4">
+    <div className="w-440:px-0 mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4">
       <Helmet title="Dashboard" />
-
       <header className="mt-4 w-full">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
         <p className="text-lg text-muted-foreground">Acompanhe suas finanças</p>
       </header>
-
-      <main className="grid w-full grid-cols-4 gap-6">
+      <main className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
         {financialMetrics.map((card) => {
           return (
             <MetricCard
