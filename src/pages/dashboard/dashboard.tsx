@@ -4,6 +4,8 @@ import { ExpenseCard } from "./expense-card";
 import { RevenueCard } from "./revenue-card";
 import { SavingsCard } from "./saving-card";
 import { PageTitle } from "@/components/ui/theme/page-title";
+import { RevenueExpenseChart } from "./revenue-expense-chart";
+import { CategoryChart } from "./category-chart";
 
 export function Dashboard() {
   return (
@@ -16,6 +18,11 @@ export function Dashboard() {
         <RevenueCard />
         <ExpenseCard />
         <SavingsCard />
+      </div>
+
+      <div className="grid w-full gap-6 xl:grid-cols-[2fr_1fr]">
+        <RevenueExpenseChart />
+        <CategoryChart />
       </div>
     </div>
   );
