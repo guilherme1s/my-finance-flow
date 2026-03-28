@@ -1,7 +1,15 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Pencil, Trash } from "lucide-react";
+import { NewTransactionForm } from "./new-transaction-form";
 
 export interface TransactionsType {
   id: number;
@@ -59,22 +67,52 @@ export function TransactionTableBodyContent({
 
           <TableCell className="py-4">
             <div className="flex items-center gap-2">
-              <Button
-                size="lg"
-                className="flex cursor-pointer items-center gap-2 bg-primary/10 px-4 text-primary hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30"
-              >
-                <Pencil className="h-4 w-4" />
-                <span className="font-medium">Editar</span>
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    size="lg"
+                    className="flex cursor-pointer items-center gap-2 bg-primary/10 px-4 text-primary hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    <span className="font-medium">Editar</span>
+                  </Button>
+                </DialogTrigger>
 
-              <Button
-                variant="destructive"
-                size="lg"
-                className="flex cursor-pointer items-center gap-2 px-4"
-              >
-                <Trash className="h-4 w-4" />
-                <span className="font-medium">Excluir</span>
-              </Button>
+                <DialogContent>
+                  <DialogTitle>Editar Transação</DialogTitle>
+                  <NewTransactionForm />
+                </DialogContent>
+              </Dialog>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="lg"
+                    className="flex cursor-pointer items-center gap-2 px-4"
+                  >
+                    <Trash className="h-4 w-4" />
+                    <span className="font-medium">Excluir</span>
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent>
+									<DialogTitle className="text-xl">Excluir transação</DialogTitle>
+                  <p className="text-lg">
+                    Tem certeza que desaja excluir essa transação?
+                  </p>
+
+                  <div className="flex gap-2">
+                    <Button className="w-1/2 cursor-pointer">Sim</Button>
+
+                    <DialogClose asChild>
+                      <Button className="w-1/2 cursor-pointer bg-rose-500">
+                        Não
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </TableCell>
         </TableRow>
