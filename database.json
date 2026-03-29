@@ -6,8 +6,7 @@
       "description": "Salário",
       "category": "Trabalho",
       "type": "Receita",
-      "amount": 50000,
-      "createdAt": "10/04/2025"
+      "amount": 50000
     },
     {
       "id": 2,
@@ -15,8 +14,7 @@
       "description": "Aluguel",
       "category": "Moradia",
       "type": "Despesa",
-      "amount": 1800,
-      "createdAt": "10/04/2025"
+      "amount": 1800
     },
     {
       "id": 3,
@@ -24,8 +22,7 @@
       "description": "Freelance",
       "category": "Trabalho",
       "type": "Receita",
-      "amount": 2740,
-      "createdAt": "10/04/2025"
+      "amount": 2740
     },
     {
       "id": 4,
@@ -33,8 +30,7 @@
       "description": "Supermercado",
       "category": "Alimentação",
       "type": "Despesa",
-      "amount": 650,
-      "createdAt": "10/04/2025"
+      "amount": 650
     },
     {
       "id": 5,
@@ -42,8 +38,7 @@
       "description": "Conta de Luz",
       "category": "Moradia",
       "type": "Despesa",
-      "amount": 1800,
-      "createdAt": "10/04/2025"
+      "amount": 1800
     },
     {
       "id": 6,
@@ -51,8 +46,7 @@
       "description": "Uber",
       "category": "Transporte",
       "type": "Despesa",
-      "amount": 120,
-      "createdAt": "10/04/2025"
+      "amount": 120
     },
     {
       "id": 7,
@@ -60,8 +54,7 @@
       "description": "Cinema",
       "category": "Lazer",
       "type": "Despesa",
-      "amount": 80,
-      "createdAt": "10/04/2025"
+      "amount": 80
     },
     {
       "id": 8,
@@ -69,8 +62,7 @@
       "description": "Dividendos",
       "category": "Investimentos",
       "type": "Receita",
-      "amount": 320,
-      "createdAt": "10/04/2025"
+      "amount": 320
     }
   ]
 }
