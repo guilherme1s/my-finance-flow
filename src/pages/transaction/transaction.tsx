@@ -1,9 +1,6 @@
 import { PageTitle } from "@/components/ui/theme/page-title";
 import { Helmet } from "react-helmet-async";
-import {
-  TransactionTableBodyContent,
-  type TransactionsType,
-} from "./transaction-table-body-content";
+import { TransactionTableBodyContent } from "./transaction-table-body-content";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
@@ -27,76 +24,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { NewTransactionForm } from "./new-transaction-form";
+import { useQuery } from "@tanstack/react-query";
+import { getTransactions } from "@/api/get-transactions";
 
 export function Transaction() {
-  const transactions: TransactionsType[] = [
-    {
-      id: 1,
-      date: "05/01/2024",
-      description: "Salário",
-      category: "Trabalho",
-      type: "Receita",
-      amount: 50000,
-    },
-    {
-      id: 2,
-      date: "10/01/2024",
-      description: "Aluguel",
-      category: "Moradia",
-      type: "Despesa",
-      amount: 1800,
-    },
-    {
-      id: 3,
-      date: "15/01/2024",
-      description: "Freelance",
-      category: "Trabalho",
-      type: "Receita",
-      amount: 2740,
-    },
-    {
-      id: 4,
-      date: "18/01/2024",
-      description: "Supermercado",
-      category: "Alimentação",
-      type: "Despesa",
-      amount: 650,
-    },
-    {
-      id: 5,
-      date: "20/01/2024",
-      description: "Conta de Luz",
-      category: "Moradia",
-      type: "Despesa",
-      amount: -1800,
-    },
-    {
-      id: 6,
-      date: "22/01/2024",
-      description: "Uber",
-      category: "Transporte",
-      type: "Despesa",
-      amount: -120,
-    },
-    {
-      id: 7,
-      date: "25/01/2024",
-      description: "Cinema",
-      category: "Lazer",
-      type: "Despesa",
-      amount: -80,
-    },
-    {
-      id: 8,
-      date: "28/01/2024",
-      description: "Dividendos",
-      category: "Investimentos",
-      type: "Receita",
-      amount: 320,
-    },
-  ];
+  const { data: transactions = [] } = useQuery({
+    queryKey: ["transactions"],
+    queryFn: getTransactions,
+  });
 
-  const totalTransactions = 100;
+  const totalTransactions = transactions.length;
 
   return (
     <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
@@ -132,48 +69,56 @@ export function Transaction() {
 
         <Card>
           <CardDescription className="px-4">
-            <Table className="mb-6 w-full table-fixed">
-              <TableHeader>
-                <TransactionTableHeaderContent />
-              </TableHeader>
+            {transactions.length > 0 ? (
+              <>
+                <Table className="mb-6 w-full table-fixed">
+                  <TableHeader>
+                    <TransactionTableHeaderContent />
+                  </TableHeader>
 
-              <TableBody>
-                <TransactionTableBodyContent transactions={transactions} />
-              </TableBody>
-            </Table>
+                  <TableBody>
+                    <TransactionTableBodyContent transactions={transactions} />
+                  </TableBody>
+                </Table>
 
-            <div className="flex w-full justify-between">
-              <p className="text-muted-foreground">
-                1 de {totalTransactions} transações
+                <div className="flex w-full justify-between">
+                  <p className="text-muted-foreground">
+                    1 de {totalTransactions} transações
+                  </p>
+
+                  <div>
+                    <Pagination>
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious href="#" />
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink href="#">1</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink href="#" isActive>
+                            2
+                          </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationLink href="#">3</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                        <PaginationItem>
+                          <PaginationNext href="#" />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="py-8 text-center text-xl text-muted-foreground">
+                Não há transações disponíveis
               </p>
-
-              <div>
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious href="#" />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink href="#" isActive>
-                        2
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink href="#">3</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext href="#" />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            </div>
+            )}
           </CardDescription>
         </Card>
       </main>
