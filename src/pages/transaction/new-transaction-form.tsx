@@ -11,27 +11,54 @@ import { Separator } from "@/components/ui/separator";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createTransaction } from "@/api/create-transaction";
+import { Toaster } from "sonner";
 
 const newTransactionFormSchema = z.object({
-  name: z.string().min(1),
   description: z.string().min(1),
   category: z.string().min(1),
   amount: z.coerce.number().min(0.01),
-  type: z.enum(["revenue", "expense"]),
+  type: z.enum(["Receita", "Despesa"]),
 });
 
-type newTransactionFormSchemaType = z.infer<typeof newTransactionFormSchema>;
+export type newTransactionFormSchemaType = z.infer<
+  typeof newTransactionFormSchema
+>;
 
 export function NewTransactionForm() {
-  const { register, handleSubmit, control } = useForm({
-    resolver: zodResolver(newTransactionFormSchema),
-    defaultValues: {
-      type: "revenue",
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: createTransactionFn } = useMutation({
+    mutationFn: createTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });
 
-  const handleSaveTransaction = (data: newTransactionFormSchemaType) => {
-    console.log(data);
+  const { register, handleSubmit, control } = useForm({
+    resolver: zodResolver(newTransactionFormSchema),
+    defaultValues: {
+      type: "Receita",
+    },
+  });
+
+  const handleSaveTransaction = async ({
+    amount,
+    category,
+    description,
+    type,
+  }: newTransactionFormSchemaType) => {
+    try {
+      await createTransactionFn({
+        amount: amount,
+        category: category,
+        description: description,
+        type: type,
+      });
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    }
   };
 
   return (
@@ -39,10 +66,11 @@ export function NewTransactionForm() {
       onSubmit={handleSubmit(handleSaveTransaction)}
       className="flex flex-col gap-4"
     >
-      <Input placeholder="Nome" {...register("name")} />
       <Input placeholder="Descrição" {...register("description")} />
       <Input placeholder="Categoria" {...register("category")} />
       <Input placeholder="Valor" {...register("amount")} />
+
+			<Toaster />
 
       <Controller
         control={control}
@@ -53,21 +81,21 @@ export function NewTransactionForm() {
             onValueChange={field.onChange}
             className="flex max-w-sm gap-2"
           >
-            <FieldLabel htmlFor="revenue-option">
+            <FieldLabel htmlFor="Receita-option">
               <Field orientation="horizontal">
                 <FieldContent>
                   <FieldTitle>Receita</FieldTitle>
                 </FieldContent>
-                <RadioGroupItem value="revenue" id="revenue-option" />
+                <RadioGroupItem value="Receita" id="Receita-option" />
               </Field>
             </FieldLabel>
 
-            <FieldLabel htmlFor="expense-option">
+            <FieldLabel htmlFor="Despesa-option">
               <Field orientation="horizontal">
                 <FieldContent>
                   <FieldTitle>Despesa</FieldTitle>
                 </FieldContent>
-                <RadioGroupItem value="expense" id="expense-option" />
+                <RadioGroupItem value="Despesa" id="Despesa-option" />
               </Field>
             </FieldLabel>
           </RadioGroup>

@@ -31,6 +31,7 @@ export function Transaction() {
   const { data: transactions = [] } = useQuery({
     queryKey: ["transactions"],
     queryFn: getTransactions,
+    staleTime: Infinity,
   });
 
   const totalTransactions = transactions.length;
@@ -47,7 +48,7 @@ export function Transaction() {
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="h-10 cursor-pointer text-lg">
+            <Button type="button" className="h-10 cursor-pointer text-lg">
               <Plus className="mr-2" size={16} /> Nova Transação
             </Button>
           </DialogTrigger>
@@ -90,24 +91,22 @@ export function Transaction() {
                     <Pagination>
                       <PaginationContent>
                         <PaginationItem>
-                          <PaginationPrevious href="#" />
+                          <PaginationPrevious />
                         </PaginationItem>
                         <PaginationItem>
-                          <PaginationLink href="#">1</PaginationLink>
+                          <PaginationLink>1</PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
-                          <PaginationLink href="#" isActive>
-                            2
-                          </PaginationLink>
+                          <PaginationLink isActive>2</PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
-                          <PaginationLink href="#">3</PaginationLink>
+                          <PaginationLink>3</PaginationLink>
                         </PaginationItem>
                         <PaginationItem>
                           <PaginationEllipsis />
                         </PaginationItem>
                         <PaginationItem>
-                          <PaginationNext href="#" />
+                          <PaginationNext />
                         </PaginationItem>
                       </PaginationContent>
                     </Pagination>

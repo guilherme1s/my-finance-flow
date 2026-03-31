@@ -3,7 +3,6 @@ import { TableHead, TableRow } from "@/components/ui/table";
 export function TransactionTableHeaderContent() {
   return (
     <TableRow>
-      <TableHead className="text-sm">ID</TableHead>
       <TableHead className="text-sm">Data</TableHead>
       <TableHead className="text-sm">Descrição</TableHead>
       <TableHead className="text-sm">Categoria</TableHead>

@@ -31,8 +31,6 @@ export function TransactionTableBodyContent({
     <>
       {transactions.map((transaction) => (
         <TableRow key={transaction.id} className="align-middle">
-          <TableCell className="py-4">{transaction.id}</TableCell>
-
           <TableCell className="py-4 text-muted-foreground">
             {transaction.date}
           </TableCell>
@@ -97,7 +95,9 @@ export function TransactionTableBodyContent({
                 </DialogTrigger>
 
                 <DialogContent>
-									<DialogTitle className="text-xl">Excluir transação</DialogTitle>
+                  <DialogTitle className="text-xl">
+                    Excluir transação
+                  </DialogTitle>
                   <p className="text-lg">
                     Tem certeza que desaja excluir essa transação?
                   </p>
