@@ -10,6 +10,8 @@ import {
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Pencil, Trash } from "lucide-react";
 import { NewTransactionForm } from "./new-transaction-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteTransaction } from "@/api/delete-transaction";
 
 export interface TransactionsType {
   id: number;
@@ -27,6 +29,19 @@ interface TransactionTableBodyPropsContent {
 export function TransactionTableBodyContent({
   transactions,
 }: TransactionTableBodyPropsContent) {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteTransactionFn } = useMutation({
+    mutationFn: (id: number) => deleteTransaction(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+
+  const handleDeleteTransaction = (id: number) => {
+    deleteTransactionFn(id);
+  };
+
   return (
     <>
       {transactions.map((transaction) => (
@@ -78,7 +93,7 @@ export function TransactionTableBodyContent({
 
                 <DialogContent>
                   <DialogTitle>Editar Transação</DialogTitle>
-                  <NewTransactionForm />
+                  <NewTransactionForm transaction={transaction} />
                 </DialogContent>
               </Dialog>
 
@@ -103,7 +118,12 @@ export function TransactionTableBodyContent({
                   </p>
 
                   <div className="flex gap-2">
-                    <Button className="w-1/2 cursor-pointer">Sim</Button>
+                    <Button
+                      className="w-1/2 cursor-pointer"
+                      onClick={() => handleDeleteTransaction(transaction.id)}
+                    >
+                      Sim
+                    </Button>
 
                     <DialogClose asChild>
                       <Button className="w-1/2 cursor-pointer bg-rose-500">

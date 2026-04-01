@@ -13,7 +13,8 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTransaction } from "@/api/create-transaction";
-import { Toaster } from "sonner";
+import { toast } from "sonner";
+import { editTransaction } from "@/api/edit-transaction";
 
 const newTransactionFormSchema = z.object({
   description: z.string().min(1),
@@ -26,7 +27,15 @@ export type newTransactionFormSchemaType = z.infer<
   typeof newTransactionFormSchema
 >;
 
-export function NewTransactionForm() {
+interface TransactionWithId extends newTransactionFormSchemaType {
+  id: number;
+}
+
+interface NewTransactionFormProps {
+  transaction?: TransactionWithId;
+}
+
+export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
   const queryClient = useQueryClient();
 
   const { mutateAsync: createTransactionFn } = useMutation({
@@ -36,11 +45,26 @@ export function NewTransactionForm() {
     },
   });
 
+  const { mutateAsync: editTransactionFn } = useMutation({
+    mutationFn: ({ id, ...transaction }: TransactionWithId) =>
+      editTransaction(id, transaction),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+  });
+
   const { register, handleSubmit, control } = useForm({
     resolver: zodResolver(newTransactionFormSchema),
-    defaultValues: {
-      type: "Receita",
-    },
+    defaultValues: transaction
+      ? {
+          description: transaction.description,
+          category: transaction.category,
+          amount: transaction.amount,
+          type: transaction.type,
+        }
+      : {
+          type: "Receita",
+        },
   });
 
   const handleSaveTransaction = async ({
@@ -49,15 +73,29 @@ export function NewTransactionForm() {
     description,
     type,
   }: newTransactionFormSchemaType) => {
+    const action = transaction?.id ? "editar transação" : "criar transação";
+
     try {
-      await createTransactionFn({
-        amount: amount,
-        category: category,
-        description: description,
-        type: type,
+      if (transaction?.id) {
+        await editTransactionFn({
+          id: transaction.id,
+          amount,
+          category,
+          description,
+          type,
+        });
+      } else {
+        await createTransactionFn({
+          amount: amount,
+          category: category,
+          description: description,
+          type: type,
+        });
+      }
+    } catch {
+      toast.error(`Erro ao ${action}`, {
+        description: "Tente novamente.",
       });
-    } catch (error) {
-      console.error("Error creating transaction:", error);
     }
   };
 
@@ -69,8 +107,6 @@ export function NewTransactionForm() {
       <Input placeholder="Descrição" {...register("description")} />
       <Input placeholder="Categoria" {...register("category")} />
       <Input placeholder="Valor" {...register("amount")} />
-
-			<Toaster />
 
       <Controller
         control={control}
