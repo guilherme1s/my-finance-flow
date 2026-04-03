@@ -1,3 +1,4 @@
+import { getTransactions } from "@/api/get-transactions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -5,17 +6,57 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useQuery } from "@tanstack/react-query";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { format, parse, subMonths } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export function RevenueExpenseChart() {
-  const chartData = [
-    { month: "Jan", receitas: 4200, despesas: 2800 },
-    { month: "Fev", receitas: 5100, despesas: 3200 },
-    { month: "Mar", receitas: 4800, despesas: 2900 },
-    { month: "Abr", receitas: 6200, despesas: 3500 },
-    { month: "Mai", receitas: 7100, despesas: 3800 },
-    { month: "Jun", receitas: 8240, despesas: 3120 },
-  ];
+  const { data: transactions = [] } = useQuery({
+    queryFn: getTransactions,
+    queryKey: ["transactions"],
+  });
+
+  const now = new Date();
+
+  const last6Months = Array.from({ length: 6 }).map((_, index) => {
+    const date = subMonths(now, 5 - index);
+    return {
+      key: format(date, "yyyy-MM"),
+      label: format(date, "MMM", { locale: ptBR }),
+    };
+  });
+
+  const grouped = transactions.reduce(
+    (acc, transaction) => {
+      const date = parse(transaction.date, "dd/MM/yyyy", new Date());
+      const monthKey = format(date, "yyyy-MM");
+
+      if (!last6Months.find((month) => month.key === monthKey)) return acc;
+
+      if (!acc[monthKey]) {
+        acc[monthKey] = {
+          receitas: 0,
+          despesas: 0,
+        };
+      }
+
+      if (transaction.type === "Receita") {
+        acc[monthKey].receitas += transaction.amount;
+      } else {
+        acc[monthKey].despesas += transaction.amount;
+      }
+
+      return acc;
+    },
+    {} as Record<string, { receitas: number; despesas: number }>
+  );
+
+  const chartData = last6Months.map(({ key, label }) => ({
+    month: label,
+    receitas: grouped[key]?.receitas ?? 0,
+    despesas: grouped[key]?.despesas ?? 0,
+  }));
 
   const chartConfig = {
     receitas: {

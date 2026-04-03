@@ -36,7 +36,7 @@ export function ExpenseCard() {
   const hasPrevious = previousExpense !== 0;
 
   const variation = hasPrevious
-    ? ((currentExpense - previousExpense) / Math.abs(previousExpense)) * 100
+    ? ((previousExpense - currentExpense) / Math.abs(previousExpense)) * 100
     : 0;
 
   const isPositive = variation >= 0;
