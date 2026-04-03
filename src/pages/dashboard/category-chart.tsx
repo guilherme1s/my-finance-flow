@@ -1,3 +1,4 @@
+import { getTransactions } from "@/api/get-transactions";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -5,28 +6,73 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useQuery } from "@tanstack/react-query";
 import { Cell, Legend, Pie, PieChart } from "recharts";
+import { format, parse } from "date-fns";
+import type { TransactionsType } from "../transaction/transaction-table-body-content";
+
+type GroupedTransactions = Record<
+  string,
+  {
+    total: number;
+    items: TransactionsType[];
+  }
+>;
 
 const COLORS = ["#0ea5e9", "#f59e0b", "#22c55e", "#8b5cf6", "#f43f5e"];
 
 export function CategoryChart() {
-  const categoryData = [
-    { name: "Alimentação", value: 1200 },
-    { name: "Transporte", value: 800 },
-    { name: "Moradia", value: 2500 },
-    { name: "Lazer", value: 450 },
-    { name: "Outros", value: 350 },
-  ];
+  const { data: transactions = [] } = useQuery<TransactionsType[]>({
+    queryFn: getTransactions,
+    queryKey: ["transactions"],
+  });
 
-  const chartConfig = {
-    Alimentação: { label: "Alimentação", color: COLORS[0] },
-    Transporte: { label: "Transporte", color: COLORS[1] },
-    Moradia: { label: "Moradia", color: COLORS[2] },
-    Lazer: { label: "Lazer", color: COLORS[3] },
-    Outros: { label: "Outros", color: COLORS[4] },
-  } satisfies ChartConfig;
+  const currentMonth = format(new Date(), "yyyy-MM");
+
+  const expenseTransactions = transactions.filter((transaction) => {
+    if (transaction.type !== "Despesa") return false;
+
+    const transactionDate = parse(transaction.date, "dd/MM/yyyy", new Date());
+    const transactionMonth = format(transactionDate, "yyyy-MM");
+
+    return transactionMonth === currentMonth;
+  });
+
+  const transactionsGroupedByCategory =
+    expenseTransactions.reduce<GroupedTransactions>((acc, transaction) => {
+      const key = transaction.category;
+
+      if (!acc[key]) {
+        acc[key] = {
+          total: 0,
+          items: [],
+        };
+      }
+
+      acc[key].items.push(transaction);
+      acc[key].total += transaction.amount;
+
+      return acc;
+    }, {});
+
+  const categoryData = Object.entries(transactionsGroupedByCategory)
+    .map(([category, data]) => ({
+      name: category,
+      value: data.total,
+    }))
+    .sort((a, b) => b.value - a.value);
 
   const total = categoryData.reduce((sum, item) => sum + item.value, 0);
+
+  const chartConfig = Object.fromEntries(
+    categoryData.map((item, index) => [
+      item.name,
+      {
+        label: item.name,
+        color: COLORS[index % COLORS.length],
+      },
+    ])
+  ) satisfies ChartConfig;
 
   return (
     <Card className="p-6">
