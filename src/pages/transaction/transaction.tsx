@@ -4,7 +4,7 @@ import { TransactionTableBodyContent } from "./transaction-table-body-content";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
-import { Table, TableBody } from "@/components/ui/table";
+import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import { TransactionTableFilters } from "./transaction-table-filters";
 import {
   Pagination,
@@ -30,6 +30,8 @@ import { TransactionTableHeaderContent } from "./transaction-table-header-conten
 export function Transaction() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const [filterType, setFilterType] = useState("Todos os tipos");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: transactions = [] } = useQuery({
     queryKey: ["transactions"],
@@ -37,15 +39,32 @@ export function Transaction() {
     staleTime: Infinity,
   });
 
-  const totalTransactions = transactions.length;
+  const transactionTypeOptions = ["Todos os tipos", "Despesas", "Receitas"];
 
-  const totalPages = Math.ceil(totalTransactions / itemsPerPage);
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter((transaction) => {
+      const typeMatch =
+        filterType === "Todos os tipos" ||
+        (filterType === "Despesas" && transaction.type === "Despesa") ||
+        (filterType === "Receitas" && transaction.type === "Receita");
 
+      const searchLower = searchTerm.toLowerCase();
+      const searchMatch =
+        transaction.description.toLowerCase().includes(searchLower) ||
+        transaction.category.toLowerCase().includes(searchLower);
+
+      return typeMatch && searchMatch;
+    });
+  }, [transactions, filterType, searchTerm]);
+
+  const totalTransactions = filteredTransactions.length;
   const currentTransactions = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return transactions.slice(start, end);
-  }, [transactions, currentPage]);
+    return filteredTransactions.slice(start, end);
+  }, [filteredTransactions, currentPage]);
+
+  const totalPages = Math.ceil(totalTransactions / itemsPerPage);
 
   return (
     <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
@@ -77,14 +96,22 @@ export function Transaction() {
       </header>
 
       <main className="flex w-full flex-col gap-4">
-        <TransactionTableFilters />
+        <TransactionTableFilters
+          typeOptions={transactionTypeOptions}
+          typeFilter={filterType}
+          searchTerm={searchTerm}
+          onTypeChange={setFilterType}
+          onSearchChange={setSearchTerm}
+        />
 
         <Card>
           <CardDescription className="px-4">
             {transactions.length > 0 ? (
               <>
                 <Table className="mb-6 w-full table-fixed">
-                  <TransactionTableHeaderContent />
+                  <TableHeader>
+                    <TransactionTableHeaderContent />
+                  </TableHeader>
 
                   <TableBody>
                     <TransactionTableBodyContent
