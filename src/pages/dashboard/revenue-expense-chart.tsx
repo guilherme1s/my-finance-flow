@@ -10,8 +10,15 @@ import { useQuery } from "@tanstack/react-query";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { format, parse, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import { useState } from "react";
 
 export function RevenueExpenseChart() {
+  const [selectedMonth, setSelectedMonth] = useState(6);
+
   const { data: transactions = [] } = useQuery({
     queryFn: getTransactions,
     queryKey: ["transactions"],
@@ -19,8 +26,8 @@ export function RevenueExpenseChart() {
 
   const now = new Date();
 
-  const last6Months = Array.from({ length: 6 }).map((_, index) => {
-    const date = subMonths(now, 5 - index);
+  const last6Months = Array.from({ length: selectedMonth }).map((_, index) => {
+    const date = subMonths(now, selectedMonth - 1 - index);
     return {
       key: format(date, "yyyy-MM"),
       label: format(date, "MMM", { locale: ptBR }),
@@ -69,13 +76,27 @@ export function RevenueExpenseChart() {
     },
   } satisfies ChartConfig;
 
+  const handleMonthRangeChange = (month: number) => {
+    setSelectedMonth(month);
+  };
+
   return (
     <Card className="p-6">
-      <CardHeader className="mb-2">
-        <p className="text-xl font-semibold">Receitas vs Despesas</p>
-        <p className="text-lg text-muted-foreground">
-          Comparativo dos últimos 6 meses
-        </p>
+      <CardHeader className="mb-2 flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-0">
+        <div>
+          <p className="text-xl font-semibold">Receitas vs Despesas</p>
+          <p className="text-lg text-muted-foreground">
+            Comparativo dos últimos 6 meses
+          </p>
+        </div>
+        <NativeSelect>
+          <NativeSelectOption onClick={() => handleMonthRangeChange(6)}>
+            Ultimos 6 meses
+          </NativeSelectOption>
+          <NativeSelectOption onClick={() => handleMonthRangeChange(12)}>
+            Ultimos 12 meses
+          </NativeSelectOption>
+        </NativeSelect>
       </CardHeader>
 
       <CardContent>
