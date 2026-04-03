@@ -9,13 +9,11 @@ import { TransactionTableFilters } from "./transaction-table-filters";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { TransactionTableHeaderContent } from "./transaction-table-header-content";
 import {
   Dialog,
   DialogContent,
@@ -26,8 +24,12 @@ import {
 import { NewTransactionForm } from "./new-transaction-form";
 import { useQuery } from "@tanstack/react-query";
 import { getTransactions } from "@/api/get-transactions";
+import { useMemo, useState } from "react";
 
 export function Transaction() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   const { data: transactions = [] } = useQuery({
     queryKey: ["transactions"],
     queryFn: getTransactions,
@@ -35,6 +37,14 @@ export function Transaction() {
   });
 
   const totalTransactions = transactions.length;
+
+  const totalPages = Math.ceil(totalTransactions / itemsPerPage);
+
+  const currentTransactions = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return transactions.slice(start, end);
+  }, [transactions, currentPage]);
 
   return (
     <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
@@ -73,40 +83,52 @@ export function Transaction() {
             {transactions.length > 0 ? (
               <>
                 <Table className="mb-6 w-full table-fixed">
-                  <TableHeader>
-                    <TransactionTableHeaderContent />
-                  </TableHeader>
+                  <TableHeader></TableHeader>
 
                   <TableBody>
-                    <TransactionTableBodyContent transactions={transactions} />
+                    <TransactionTableBodyContent
+                      transactions={currentTransactions}
+                    />
                   </TableBody>
                 </Table>
 
                 <div className="flex w-full justify-between">
                   <p className="text-muted-foreground">
-                    1 de {totalTransactions} transações
+                    {currentPage * itemsPerPage - itemsPerPage + 1} a{" "}
+                    {Math.min(currentPage * itemsPerPage, totalTransactions)} de{" "}
+                    {totalTransactions} transações
                   </p>
 
                   <div>
                     <Pagination>
                       <PaginationContent>
                         <PaginationItem>
-                          <PaginationPrevious />
+                          <PaginationPrevious
+                            onClick={() =>
+                              setCurrentPage((prev) => Math.max(prev - 1, 1))
+                            }
+                          />
                         </PaginationItem>
+
+                        {Array.from({ length: totalPages }, (_, i) => (
+                          <PaginationItem key={i}>
+                            <PaginationLink
+                              isActive={currentPage === i + 1}
+                              onClick={() => setCurrentPage(i + 1)}
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+
                         <PaginationItem>
-                          <PaginationLink>1</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink isActive>2</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink>3</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationNext />
+                          <PaginationNext
+                            onClick={() =>
+                              setCurrentPage((prev) =>
+                                Math.min(prev + 1, totalPages)
+                              )
+                            }
+                          />
                         </PaginationItem>
                       </PaginationContent>
                     </Pagination>
