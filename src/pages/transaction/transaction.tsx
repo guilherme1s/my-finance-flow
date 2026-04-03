@@ -4,7 +4,7 @@ import { TransactionTableBodyContent } from "./transaction-table-body-content";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
-import { Table, TableBody, TableHeader } from "@/components/ui/table";
+import { Table, TableBody } from "@/components/ui/table";
 import { TransactionTableFilters } from "./transaction-table-filters";
 import {
   Pagination,
@@ -25,6 +25,7 @@ import { NewTransactionForm } from "./new-transaction-form";
 import { useQuery } from "@tanstack/react-query";
 import { getTransactions } from "@/api/get-transactions";
 import { useMemo, useState } from "react";
+import { TransactionTableHeaderContent } from "./transaction-table-header-content";
 
 export function Transaction() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,7 +84,7 @@ export function Transaction() {
             {transactions.length > 0 ? (
               <>
                 <Table className="mb-6 w-full table-fixed">
-                  <TableHeader></TableHeader>
+                  <TransactionTableHeaderContent />
 
                   <TableBody>
                     <TransactionTableBodyContent
