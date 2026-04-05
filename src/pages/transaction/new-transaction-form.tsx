@@ -11,10 +11,15 @@ import { Separator } from "@/components/ui/separator";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createTransaction } from "@/api/create-transaction";
 import { toast } from "sonner";
 import { editTransaction } from "@/api/edit-transaction";
+import { getCategories } from "@/api/get-categories";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 
 const newTransactionFormSchema = z.object({
   description: z.string().min(1),
@@ -53,6 +58,11 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
     },
   });
 
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
+
   const { register, handleSubmit, control } = useForm({
     resolver: zodResolver(newTransactionFormSchema),
     defaultValues: transaction
@@ -63,6 +73,7 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
           type: transaction.type,
         }
       : {
+          category: "",
           type: "Receita",
         },
   });
@@ -86,10 +97,10 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
         });
       } else {
         await createTransactionFn({
-          amount: amount,
-          category: category,
-          description: description,
-          type: type,
+          amount,
+          category,
+          description,
+          type,
         });
       }
     } catch {
@@ -105,7 +116,18 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
       className="flex flex-col gap-4"
     >
       <Input placeholder="Descrição" {...register("description")} />
-      <Input placeholder="Categoria" {...register("category")} />
+
+      <NativeSelect className="w-full" {...register("category")}>
+        <NativeSelectOption value="" disabled>
+          Selecione uma categoria
+        </NativeSelectOption>
+        {categories.map((category) => (
+          <NativeSelectOption key={category.id} value={category.name}>
+            {category.name}
+          </NativeSelectOption>
+        ))}
+      </NativeSelect>
+
       <Input placeholder="Valor" {...register("amount")} />
 
       <Controller

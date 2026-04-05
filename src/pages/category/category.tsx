@@ -73,7 +73,7 @@ export function Category() {
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button type="button" className="h-10 cursor-pointer text-lg">
+            <Button type="button" className="h-10 cursor-pointer text-md">
               <Plus className="mr-2" size={16} /> Nova Categoria
             </Button>
           </DialogTrigger>
