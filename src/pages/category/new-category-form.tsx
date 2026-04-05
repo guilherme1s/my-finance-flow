@@ -11,8 +11,11 @@ import { toast } from "sonner";
 import { editCategory } from "@/api/edit-category";
 
 const newCategoryFormSchema = z.object({
-  name: z.string().min(5),
-  description: z.string().optional(),
+  name: z.string().min(2),
+  description: z
+    .string()
+    .optional()
+    .transform((value) => (value?.trim() ? value : "-")),
 });
 
 export type newCategoryFormSchemaType = z.infer<typeof newCategoryFormSchema>;
@@ -58,8 +61,8 @@ export function NewCategoryForm({ category }: NewCategoryFormProps) {
         await editCategoryFn({ id: category.id, name, description });
       } else {
         await createCategoryFn({
-          name: name,
-          description: description,
+          name,
+          description,
         });
       }
     } catch {
