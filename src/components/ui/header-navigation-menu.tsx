@@ -1,4 +1,4 @@
-import { ArrowRightLeft, LayoutDashboard } from "lucide-react";
+import { ArrowRightLeft, LayoutDashboard, Tag } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { Separator } from "./separator";
 
@@ -27,19 +27,31 @@ export function HeaderNavigationMenu({ display }: HeaderNavigationMenuProps) {
             <ArrowRightLeft size={16} />
             Transações
           </NavLink>
+
+          <NavLink to="/category" className={navItemClass}>
+            <Tag size={16} />
+            Categorias
+          </NavLink>
         </>
       ) : (
-        <div className="flex flex-col gap-4 text-xl p-4 w-full">
+        <div className="flex w-full flex-col gap-4 p-4 text-xl">
           <NavLink to="/" className="flex items-center gap-2">
             <LayoutDashboard size={20} />
             Dashboard
           </NavLink>
 
-					<Separator />
+          <Separator />
 
           <NavLink to="/transaction" className="flex items-center gap-2">
             <ArrowRightLeft size={20} />
             Transações
+          </NavLink>
+
+          <Separator />
+
+          <NavLink to="/category" className="flex items-center gap-2">
+            <ArrowRightLeft size={20} />
+            Categorias
           </NavLink>
         </div>
       )}

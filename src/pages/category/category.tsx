@@ -1,11 +1,22 @@
 import { PageTitle } from "@/components/ui/theme/page-title";
 import { Helmet } from "react-helmet-async";
-import { TransactionTableBodyContent } from "./transaction-table-body-content";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
-import { TransactionTableFilters } from "./transaction-table-filters";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { NewCategoryForm } from "./new-category-form";
+import { CategoryTableHeaderContent } from "./category-table-header-content";
+import { getCategories } from "@/api/get-categories";
+import { CategoryTableBodyContent } from "./category-table-body-content";
 import {
   Pagination,
   PaginationContent,
@@ -14,118 +25,98 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { NewTransactionForm } from "./new-transaction-form";
-import { useQuery } from "@tanstack/react-query";
-import { getTransactions } from "@/api/get-transactions";
-import { useMemo, useState } from "react";
-import { TransactionTableHeaderContent } from "./transaction-table-header-content";
+import { Input } from "@/components/ui/input";
 
-export function Transaction() {
+export function Category() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterType, setFilterType] = useState("Todos os tipos");
   const [searchTerm, setSearchTerm] = useState("");
 
   const itemsPerPage = 8;
 
-  const { data: transactions = [] } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: getTransactions,
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
     staleTime: Infinity,
   });
 
-  const transactionTypeOptions = ["Todos os tipos", "Despesas", "Receitas"];
-
-  const filteredTransactions = useMemo(() => {
-    return transactions.filter((transaction) => {
-      const typeMatch =
-        filterType === "Todos os tipos" ||
-        (filterType === "Despesas" && transaction.type === "Despesa") ||
-        (filterType === "Receitas" && transaction.type === "Receita");
-
+  const filteredCategories = useMemo(() => {
+    return categories.filter((category) => {
       const searchLower = searchTerm.toLowerCase();
       const searchMatch =
-        transaction.description.toLowerCase().includes(searchLower) ||
-        transaction.category.toLowerCase().includes(searchLower);
+        category.description.toLowerCase().includes(searchLower) ||
+        category.name.toLowerCase().includes(searchLower);
 
-      return typeMatch && searchMatch;
+      return searchMatch;
     });
-  }, [transactions, filterType, searchTerm]);
+  }, [categories, searchTerm]);
 
-  const totalTransactions = filteredTransactions.length;
-  const currentTransactions = useMemo(() => {
+  const totalCategories = filteredCategories.length;
+
+  const currentCategories = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return filteredTransactions.slice(start, end);
-  }, [filteredTransactions, currentPage]);
 
-  const totalPages = Math.ceil(totalTransactions / itemsPerPage);
+    return filteredCategories.slice(start, end);
+  }, [filteredCategories, currentPage]);
+
+  const totalPages = Math.ceil(totalCategories / itemsPerPage);
 
   return (
     <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
-      <Helmet title="Transações" />
+      <Helmet title="Categorias" />
 
       <header className="flex w-full items-center justify-between">
         <PageTitle
-          title="Transações"
-          subtitle="Gerencie todas as suas transacoes financeiras."
+          title="Categorias"
+          subtitle="Crie e gerencie suas categorias para utilizar em suas transações"
         />
 
         <Dialog>
           <DialogTrigger asChild>
             <Button type="button" className="h-10 cursor-pointer text-lg">
-              <Plus className="mr-2" size={16} /> Nova Transação
+              <Plus className="mr-2" size={16} /> Nova Categoria
             </Button>
           </DialogTrigger>
 
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-lg font-semibold">
-                Nova Transação
+                Nova Categoria
               </DialogTitle>
             </DialogHeader>
 
-            <NewTransactionForm />
+            <NewCategoryForm />
           </DialogContent>
         </Dialog>
       </header>
 
       <main className="flex w-full flex-col gap-4">
-        <TransactionTableFilters
-          typeOptions={transactionTypeOptions}
-          typeFilter={filterType}
-          searchTerm={searchTerm}
-          onTypeChange={setFilterType}
-          onSearchChange={setSearchTerm}
+        <Input
+          placeholder="Buscar categoria..."
+          className="w-md"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
 
         <Card>
           <CardDescription className="px-4">
-            {transactions.length > 0 ? (
+            {categories.length > 0 ? (
               <>
                 <Table className="mb-6 w-full table-fixed">
                   <TableHeader>
-                    <TransactionTableHeaderContent />
+                    <CategoryTableHeaderContent />
                   </TableHeader>
 
                   <TableBody>
-                    <TransactionTableBodyContent
-                      transactions={currentTransactions}
-                    />
+                    <CategoryTableBodyContent categories={currentCategories} />
                   </TableBody>
                 </Table>
 
                 <div className="flex w-full justify-between">
                   <p className="text-muted-foreground">
                     {currentPage * itemsPerPage - itemsPerPage + 1} a{" "}
-                    {Math.min(currentPage * itemsPerPage, totalTransactions)} de{" "}
-                    {totalTransactions} transações
+                    {Math.min(currentPage * itemsPerPage, totalCategories)} de{" "}
+                    {totalCategories} categorias
                   </p>
 
                   <div>
@@ -166,7 +157,8 @@ export function Transaction() {
               </>
             ) : (
               <p className="py-8 text-center text-xl text-muted-foreground">
-                Não há transações disponíveis
+                Não há categorias disponíveis. Crie uma nova categoria para
+                começar a organizar suas transações.
               </p>
             )}
           </CardDescription>
