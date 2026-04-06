@@ -1,7 +1,7 @@
 import { PageTitle } from "@/components/ui/theme/page-title";
 import { Helmet } from "react-helmet-async";
 import { TransactionTableBodyContent } from "./transaction-table-body-content";
-import { Plus } from "lucide-react";
+import { ArrowRightLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
@@ -26,6 +26,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTransactions } from "@/api/get-transactions";
 import { useMemo, useState } from "react";
 import { TransactionTableHeaderContent } from "./transaction-table-header-content";
+import { NoDataTable } from "@/components/ui/no-data-table";
 
 export function Transaction() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,7 +80,7 @@ export function Transaction() {
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button type="button" className="h-10 cursor-pointer text-md">
+            <Button type="button" className="text-md h-10 cursor-pointer">
               <Plus className="mr-2" size={16} /> Nova Transação
             </Button>
           </DialogTrigger>
@@ -165,9 +166,11 @@ export function Transaction() {
                 </div>
               </>
             ) : (
-              <p className="py-8 text-center text-xl text-muted-foreground">
-                Não há transações disponíveis
-              </p>
+              <NoDataTable
+                title="Nenhuma transação encontrada"
+                description="Começe criando uma nova transação para acompanhar suas finanças."
+                icon={ArrowRightLeft}
+              />
             )}
           </CardDescription>
         </Card>

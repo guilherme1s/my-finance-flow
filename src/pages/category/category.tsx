@@ -1,6 +1,6 @@
 import { PageTitle } from "@/components/ui/theme/page-title";
 import { Helmet } from "react-helmet-async";
-import { Plus } from "lucide-react";
+import { Plus, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
@@ -26,6 +26,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
+import { NoDataTable } from "@/components/ui/no-data-table";
 
 export function Category() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,7 +74,7 @@ export function Category() {
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button type="button" className="h-10 cursor-pointer text-md">
+            <Button type="button" className="text-md h-10 cursor-pointer">
               <Plus className="mr-2" size={16} /> Nova Categoria
             </Button>
           </DialogTrigger>
@@ -156,10 +157,11 @@ export function Category() {
                 </div>
               </>
             ) : (
-              <p className="py-8 text-center text-xl text-muted-foreground">
-                Não há categorias disponíveis. Crie uma nova categoria para
-                começar a organizar suas transações.
-              </p>
+              <NoDataTable
+                title="Nenhuma categoria encontrada"
+                description="Começe criando uma nova categoria para utilizar em suas transações."
+                icon={Tag}
+              />
             )}
           </CardDescription>
         </Card>
