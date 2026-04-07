@@ -103,7 +103,7 @@ export function Category() {
           <div className="px-4">
             {categories.length > 0 ? (
               <>
-                <Table className="mb-6 w-full table-fixed">
+                <Table className="mb-6 w-full lg:table-fixed">
                   <TableHeader>
                     <CategoryTableHeaderContent />
                   </TableHeader>
