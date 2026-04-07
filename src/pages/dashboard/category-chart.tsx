@@ -122,7 +122,11 @@ export function CategoryChart() {
         <div className="flex w-full flex-col items-center">
           <p className="text-xl text-muted-foreground">Total de despesas</p>
           <p className="text-2xl font-bold">
-            R$ {total.toLocaleString("pt-BR")}
+            {total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+              minimumFractionDigits: 2,
+            })}
           </p>
         </div>
       </CardContent>
