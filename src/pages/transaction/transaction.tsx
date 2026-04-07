@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { TransactionTableBodyContent } from "./transaction-table-body-content";
 import { ArrowRightLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import { TransactionTableFilters } from "./transaction-table-filters";
 import {
@@ -107,7 +107,7 @@ export function Transaction() {
         />
 
         <Card>
-          <CardDescription className="px-4">
+          <div className="px-4">
             {transactions.length > 0 ? (
               <>
                 <Table className="mb-6 w-full table-fixed">
@@ -172,7 +172,7 @@ export function Transaction() {
                 icon={ArrowRightLeft}
               />
             )}
-          </CardDescription>
+          </div>
         </Card>
       </main>
     </div>

@@ -2,14 +2,14 @@ import { PageTitle } from "@/components/ui/theme/page-title";
 import { Helmet } from "react-helmet-async";
 import { Plus, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -18,12 +18,12 @@ import { CategoryTableHeaderContent } from "./category-table-header-content";
 import { getCategories } from "@/api/get-categories";
 import { CategoryTableBodyContent } from "./category-table-body-content";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { NoDataTable } from "@/components/ui/no-data-table";
@@ -100,7 +100,7 @@ export function Category() {
         />
 
         <Card>
-          <CardDescription className="px-4">
+          <div className="px-4">
             {categories.length > 0 ? (
               <>
                 <Table className="mb-6 w-full table-fixed">
@@ -163,7 +163,7 @@ export function Category() {
                 icon={Tag}
               />
             )}
-          </CardDescription>
+          </div>
         </Card>
       </main>
     </div>
