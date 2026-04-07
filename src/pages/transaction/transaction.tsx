@@ -72,7 +72,7 @@ export function Transaction() {
     <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
       <Helmet title="Transações" />
 
-      <header className="flex w-full items-center justify-between">
+      <header className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row">
         <PageTitle
           title="Transações"
           subtitle="Gerencie todas as suas transacoes financeiras."

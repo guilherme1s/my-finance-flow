@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -18,12 +18,12 @@ import { CategoryTableHeaderContent } from "./category-table-header-content";
 import { getCategories } from "@/api/get-categories";
 import { CategoryTableBodyContent } from "./category-table-body-content";
 import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { NoDataTable } from "@/components/ui/no-data-table";
@@ -66,7 +66,7 @@ export function Category() {
     <div className="mx-auto flex w-full max-w-430 flex-col items-center justify-between gap-8 px-6 py-4 min-[1720px]:px-0">
       <Helmet title="Categorias" />
 
-      <header className="flex w-full items-center justify-between">
+      <header className="flex w-full flex-col items-center justify-between gap-4 sm:flex-row sm:gap-0">
         <PageTitle
           title="Categorias"
           subtitle="Crie e gerencie suas categorias para utilizar em suas transações"
