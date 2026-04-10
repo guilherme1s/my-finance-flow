@@ -31,6 +31,7 @@ import { NoDataTable } from "@/components/ui/no-data-table";
 export function Category() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false);
 
   const itemsPerPage = 8;
 
@@ -72,7 +73,10 @@ export function Category() {
           subtitle="Crie e gerencie suas categorias para utilizar em suas transações"
         />
 
-        <Dialog>
+        <Dialog
+          open={isAddCategoryDialogOpen}
+          onOpenChange={setIsAddCategoryDialogOpen}
+        >
           <DialogTrigger asChild>
             <Button type="button" className="text-md h-10 cursor-pointer">
               <Plus className="mr-2" size={16} /> Nova Categoria
@@ -86,7 +90,9 @@ export function Category() {
               </DialogTitle>
             </DialogHeader>
 
-            <NewCategoryForm />
+            <NewCategoryForm
+              onSuccess={() => setIsAddCategoryDialogOpen(false)}
+            />
           </DialogContent>
         </Dialog>
       </header>

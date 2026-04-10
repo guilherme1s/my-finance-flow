@@ -9,6 +9,7 @@ import { createCategory } from "@/api/create-category";
 import { queryClient } from "@/lib/react-query";
 import { toast } from "sonner";
 import { editCategory } from "@/api/edit-category";
+import { Textarea } from "@/components/ui/textarea";
 
 const newCategoryFormSchema = z.object({
   name: z.string().min(2),
@@ -26,9 +27,10 @@ interface CategoryWithId extends newCategoryFormSchemaType {
 
 interface NewCategoryFormProps {
   category?: CategoryWithId;
+  onSuccess: () => void;
 }
 
-export function NewCategoryForm({ category }: NewCategoryFormProps) {
+export function NewCategoryForm({ category, onSuccess }: NewCategoryFormProps) {
   const { mutateAsync: createCategoryFn } = useMutation({
     mutationFn: createCategory,
     onSuccess: () => {
@@ -36,13 +38,14 @@ export function NewCategoryForm({ category }: NewCategoryFormProps) {
     },
   });
 
-  const { mutateAsync: editCategoryFn } = useMutation({
-    mutationFn: ({ id, ...category }: CategoryWithId) =>
-      editCategory(id, category),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-    },
-  });
+  const { mutateAsync: editCategoryFn, isPending: categoryLoading } =
+    useMutation({
+      mutationFn: ({ id, ...category }: CategoryWithId) =>
+        editCategory(id, category),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["categories"] });
+      },
+    });
 
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(newCategoryFormSchema),
@@ -59,11 +62,14 @@ export function NewCategoryForm({ category }: NewCategoryFormProps) {
     try {
       if (category?.id) {
         await editCategoryFn({ id: category.id, name, description });
+        toast.success("Categoria editada com sucesso.");
       } else {
         await createCategoryFn({
           name,
           description,
         });
+        toast.success("Categoria criada com sucesso.");
+        onSuccess();
       }
     } catch {
       toast.error("Erro ao criar categoria. Tente novamente.");
@@ -76,11 +82,13 @@ export function NewCategoryForm({ category }: NewCategoryFormProps) {
       className="flex flex-col gap-4"
     >
       <Input placeholder="Nome*" {...register("name")} />
-      <Input placeholder="Descrição" {...register("description")} />
+      <Textarea placeholder="Descrição" {...register("description")} />
 
       <Separator />
 
-      <Button type="submit">Salvar</Button>
+      <Button type="submit" disabled={categoryLoading}>
+        Salvar
+      </Button>
     </form>
   );
 }

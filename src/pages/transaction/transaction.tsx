@@ -32,6 +32,7 @@ export function Transaction() {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterType, setFilterType] = useState("Todos os tipos");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false);
 
   const itemsPerPage = 8;
 
@@ -78,7 +79,10 @@ export function Transaction() {
           subtitle="Gerencie todas as suas transacoes financeiras."
         />
 
-        <Dialog>
+        <Dialog
+          open={isAddCategoryDialogOpen}
+          onOpenChange={setIsAddCategoryDialogOpen}
+        >
           <DialogTrigger asChild>
             <Button type="button" className="text-md h-10 cursor-pointer">
               <Plus className="mr-2" size={16} /> Nova Transação
@@ -92,7 +96,9 @@ export function Transaction() {
               </DialogTitle>
             </DialogHeader>
 
-            <NewTransactionForm />
+            <NewTransactionForm
+              onSuccess={() => setIsAddCategoryDialogOpen(false)}
+            />
           </DialogContent>
         </Dialog>
       </header>

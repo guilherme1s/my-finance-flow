@@ -38,9 +38,13 @@ interface TransactionWithId extends newTransactionFormSchemaType {
 
 interface NewTransactionFormProps {
   transaction?: TransactionWithId;
+  onSuccess?: () => void;
 }
 
-export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
+export function NewTransactionForm({
+  transaction,
+  onSuccess,
+}: NewTransactionFormProps) {
   const queryClient = useQueryClient();
 
   const { mutateAsync: createTransactionFn } = useMutation({
@@ -95,6 +99,8 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
           description,
           type,
         });
+        toast.success("Transação editada com sucesso!");
+        onSuccess?.();
       } else {
         await createTransactionFn({
           amount,
@@ -102,6 +108,8 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
           description,
           type,
         });
+        toast.success("Transação criada com sucesso!");
+        onSuccess?.();
       }
     } catch {
       toast.error(`Erro ao ${action}`, {
@@ -139,7 +147,7 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
             onValueChange={field.onChange}
             className="flex max-w-sm gap-2"
           >
-            <FieldLabel htmlFor="Receita-option">
+            <FieldLabel htmlFor="Receita-option" className="py-1">
               <Field orientation="horizontal">
                 <FieldContent>
                   <FieldTitle>Receita</FieldTitle>
@@ -148,7 +156,7 @@ export function NewTransactionForm({ transaction }: NewTransactionFormProps) {
               </Field>
             </FieldLabel>
 
-            <FieldLabel htmlFor="Despesa-option">
+            <FieldLabel htmlFor="Despesa-option" className="py-1">
               <Field orientation="horizontal">
                 <FieldContent>
                   <FieldTitle>Despesa</FieldTitle>
