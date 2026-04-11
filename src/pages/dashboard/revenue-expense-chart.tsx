@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/chart";
 import { useQuery } from "@tanstack/react-query";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { format, parse, subMonths } from "date-fns";
+import { format, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   NativeSelect,
@@ -36,7 +36,8 @@ export function RevenueExpenseChart() {
 
   const grouped = transactions.reduce(
     (acc, transaction) => {
-      const date = parse(transaction.date, "dd/MM/yyyy", new Date());
+      const date = new Date(transaction.date);
+
       const monthKey = format(date, "yyyy-MM");
 
       if (!last6Months.find((month) => month.key === monthKey)) return acc;

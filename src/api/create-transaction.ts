@@ -1,11 +1,17 @@
 import { api } from "@/lib/axios";
-import type { newTransactionFormSchemaType } from "@/pages/transaction/new-transaction-form";
 
-export async function createTransaction({ amount, category, description, type }: newTransactionFormSchemaType) {
+interface CreateTransactionResponse {
+	amount: number;
+	category: string;
+	description: string;
+	type: "Receita" | "Despesa";
+}
+
+export async function createTransaction({ amount, category, description, type }: CreateTransactionResponse) {
 	await api.post('/transactions', {
 		amount,
 		category,
-		date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+		date: new Date().toISOString(),
 		description,
 		type,
 	});

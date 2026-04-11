@@ -1,10 +1,15 @@
 import { api } from "@/lib/axios";
-import type { newCategoryFormSchemaType } from "@/pages/category/new-category-form";
 
-export async function createCategory({ name, description }: newCategoryFormSchemaType) {
+interface CreateCategoryResponse {
+	name: string;
+	description: string;
+}
+
+export async function createCategory({ name, description }: CreateCategoryResponse) {
 	const response = await api.post("/categories", {
 		name: name,
-		description: description
+		description: description,
+		createdAt: new Date().toISOString(),
 	});
 
 	return response.data;

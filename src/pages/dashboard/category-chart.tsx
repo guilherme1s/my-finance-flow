@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/chart";
 import { useQuery } from "@tanstack/react-query";
 import { Cell, Legend, Pie, PieChart } from "recharts";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import type { TransactionsType } from "../transaction/transaction-table-body-content";
 
 type GroupedTransactions = Record<
@@ -32,7 +32,7 @@ export function CategoryChart() {
   const expenseTransactions = transactions.filter((transaction) => {
     if (transaction.type !== "Despesa") return false;
 
-    const transactionDate = parse(transaction.date, "dd/MM/yyyy", new Date());
+    const transactionDate = new Date(transaction.date);
     const transactionMonth = format(transactionDate, "yyyy-MM");
 
     return transactionMonth === currentMonth;

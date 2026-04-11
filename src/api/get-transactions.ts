@@ -4,5 +4,5 @@ import type { TransactionsType } from "@/pages/transaction/transaction-table-bod
 export async function getTransactions() {
 	const response = await api.get<TransactionsType[]>('/transactions');
 
-	return response.data;
+	return [...response.data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }

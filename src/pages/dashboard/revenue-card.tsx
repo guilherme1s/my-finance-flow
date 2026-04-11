@@ -1,7 +1,7 @@
 import { getTransactions } from "@/api/get-transactions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
-import { format, parse, subMonths } from "date-fns";
+import { format, subMonths } from "date-fns";
 import { MoveUpRight, MoveDownRight, TrendingUp } from "lucide-react";
 
 export function RevenueCard() {
@@ -14,7 +14,7 @@ export function RevenueCard() {
     (acc, transaction) => {
       if (transaction.type !== "Receita") return acc;
 
-      const parsedDate = parse(transaction.date, "dd/MM/yyyy", new Date());
+      const parsedDate = new Date(transaction.date);
       const month = format(parsedDate, "yyyy-MM");
 
       if (!acc[month]) acc[month] = 0;

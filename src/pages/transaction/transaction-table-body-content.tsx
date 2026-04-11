@@ -47,7 +47,11 @@ export function TransactionTableBodyContent({
       {transactions.map((transaction) => (
         <TableRow key={transaction.id} className="align-middle">
           <TableCell className="py-4 text-muted-foreground">
-            {transaction.date}
+            {new Date(transaction.date).toLocaleString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
           </TableCell>
 
           <TableCell className="py-4">{transaction.description}</TableCell>
