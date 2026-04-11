@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { LayoutDashboard } from "lucide-react";
 
-export function NoData() {
+export function NoDataDashboard() {
   return (
     <Card className="flex w-full items-center justify-center px-4 py-38">
       <div className="flex max-w-lg flex-col items-center gap-4 text-center">

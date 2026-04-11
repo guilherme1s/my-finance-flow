@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Cell, Legend, Pie, PieChart } from "recharts";
 import { format } from "date-fns";
 import type { TransactionsType } from "../transaction/transaction-table-body-content";
+import { NoDataCategoryChart } from "./no-data-category-chart";
 
 type GroupedTransactions = Record<
   string,
@@ -84,51 +85,57 @@ export function CategoryChart() {
       </CardHeader>
 
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-75 w-full">
-          <PieChart>
-            <Pie
-              data={categoryData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              paddingAngle={2}
-              dataKey="value"
-              nameKey="name"
-            >
-              {categoryData.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+        {categoryData.length > 0 ? (
+          <>
+            <ChartContainer config={chartConfig} className="h-75 w-full">
+              <PieChart>
+                <Pie
+                  data={categoryData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                  nameKey="name"
+                >
+                  {categoryData.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+
+                <ChartTooltip content={<ChartTooltipContent />} />
+
+                <Legend
+                  verticalAlign="middle"
+                  align="right"
+                  layout="vertical"
+                  iconType="circle"
+                  iconSize={8}
+                  formatter={(value: string) => (
+                    <span className="text-sm text-foreground">{value}</span>
+                  )}
                 />
-              ))}
-            </Pie>
+              </PieChart>
+            </ChartContainer>
 
-            <ChartTooltip content={<ChartTooltipContent />} />
-
-            <Legend
-              verticalAlign="middle"
-              align="right"
-              layout="vertical"
-              iconType="circle"
-              iconSize={8}
-              formatter={(value: string) => (
-                <span className="text-sm text-foreground">{value}</span>
-              )}
-            />
-          </PieChart>
-        </ChartContainer>
-
-        <div className="flex w-full flex-col items-center">
-          <p className="text-xl text-muted-foreground">Total de despesas</p>
-          <p className="text-2xl font-bold">
-            {total.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-              minimumFractionDigits: 2,
-            })}
-          </p>
-        </div>
+            <div className="flex w-full flex-col items-center">
+              <p className="text-xl text-muted-foreground">Total de despesas</p>
+              <p className="text-2xl font-bold">
+                {total.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                  minimumFractionDigits: 2,
+                })}
+              </p>
+            </div>
+          </>
+        ) : (
+          <NoDataCategoryChart />
+        )}
       </CardContent>
     </Card>
   );

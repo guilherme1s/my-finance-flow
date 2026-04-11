@@ -8,7 +8,7 @@ import { RevenueExpenseChart } from "./revenue-expense-chart";
 import { CategoryChart } from "./category-chart";
 import { useQuery } from "@tanstack/react-query";
 import { getTransactions } from "@/api/get-transactions";
-import { NoData } from "./no-data-dashboard";
+import { NoDataDashboard } from "./no-data-dashboard";
 
 export function Dashboard() {
   const { data: transactions = [] } = useQuery({
@@ -36,7 +36,7 @@ export function Dashboard() {
           </div>
         </>
       ) : (
-        <NoData />
+        <NoDataDashboard />
       )}
     </div>
   );
