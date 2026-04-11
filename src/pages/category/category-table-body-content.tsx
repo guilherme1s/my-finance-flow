@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteCategory } from "@/api/delete-category";
 import { queryClient } from "@/lib/react-query";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export interface CategoryType {
   id: number;
@@ -27,6 +28,10 @@ interface CategoryTableBodyPropsContent {
 export function CategoryTableBodyContent({
   categories,
 }: CategoryTableBodyPropsContent) {
+  const [editingCategoryId, setEditingCategoryId] = useState<number | null>(
+    null
+  );
+
   const { mutateAsync: deleteCategoryFn } = useMutation({
     mutationFn: deleteCategory,
     onSuccess: () => {
@@ -37,6 +42,7 @@ export function CategoryTableBodyContent({
   const handleDeleteCategory = async (id: number) => {
     try {
       await deleteCategoryFn(id);
+      toast.success("Categoria excluída com sucesso!");
     } catch {
       toast.error("Erro ao deletar categoria. Tente novamente.");
     }
@@ -54,7 +60,12 @@ export function CategoryTableBodyContent({
 
           <TableCell className="py-4">
             <div className="flex items-center gap-2">
-              <Dialog>
+              <Dialog
+                open={editingCategoryId === category.id}
+                onOpenChange={(open) =>
+                  setEditingCategoryId(open ? category.id : null)
+                }
+              >
                 <DialogTrigger asChild>
                   <Button
                     size="lg"
@@ -67,7 +78,10 @@ export function CategoryTableBodyContent({
 
                 <DialogContent>
                   <DialogTitle>Editar Categoria</DialogTitle>
-                  <NewCategoryForm category={category} />
+                  <NewCategoryForm
+                    category={category}
+                    onSuccess={() => setEditingCategoryId(null)}
+                  />
                 </DialogContent>
               </Dialog>
 

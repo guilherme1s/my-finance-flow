@@ -12,6 +12,8 @@ import { Pencil, Trash } from "lucide-react";
 import { NewTransactionForm } from "./new-transaction-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTransaction } from "@/api/delete-transaction";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export interface TransactionsType {
   id: number;
@@ -29,6 +31,10 @@ interface TransactionTableBodyPropsContent {
 export function TransactionTableBodyContent({
   transactions,
 }: TransactionTableBodyPropsContent) {
+  const [editingTransactionId, setEditingTransactionId] = useState<
+    number | null
+  >(null);
+
   const queryClient = useQueryClient();
 
   const { mutateAsync: deleteTransactionFn } = useMutation({
@@ -38,8 +44,13 @@ export function TransactionTableBodyContent({
     },
   });
 
-  const handleDeleteTransaction = (id: number) => {
-    deleteTransactionFn(id);
+  const handleDeleteTransaction = async (id: number) => {
+    try {
+      await deleteTransactionFn(id);
+      toast.success("Transação excluída com sucesso!");
+    } catch {
+      toast.error("Erro ao deletar transação. Tente novamente.");
+    }
   };
 
   return (
@@ -84,7 +95,12 @@ export function TransactionTableBodyContent({
 
           <TableCell className="py-4">
             <div className="flex items-center gap-2">
-              <Dialog>
+              <Dialog
+                open={editingTransactionId === transaction.id}
+                onOpenChange={(open) =>
+                  setEditingTransactionId(open ? transaction.id : null)
+                }
+              >
                 <DialogTrigger asChild>
                   <Button
                     size="lg"
@@ -97,7 +113,10 @@ export function TransactionTableBodyContent({
 
                 <DialogContent>
                   <DialogTitle>Editar Transação</DialogTitle>
-                  <NewTransactionForm transaction={transaction} />
+                  <NewTransactionForm
+                    transaction={transaction}
+                    onSuccess={() => setEditingTransactionId(null)}
+                  />
                 </DialogContent>
               </Dialog>
 
