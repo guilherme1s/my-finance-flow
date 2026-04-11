@@ -63,6 +63,7 @@ export function NewCategoryForm({ category, onSuccess }: NewCategoryFormProps) {
       if (category?.id) {
         await editCategoryFn({ id: category.id, name, description });
         toast.success("Categoria editada com sucesso.");
+        onSuccess();
       } else {
         await createCategoryFn({
           name,
