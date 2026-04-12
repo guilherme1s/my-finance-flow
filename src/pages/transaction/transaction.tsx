@@ -7,14 +7,6 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import { TransactionTableFilters } from "./transaction-table-filters";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -27,6 +19,7 @@ import { getTransactions } from "@/api/get-transactions";
 import { useMemo, useState } from "react";
 import { TransactionTableHeaderContent } from "./transaction-table-header-content";
 import { NoDataTable } from "@/components/ui/no-data-table";
+import { PaginationTable } from "@/components/ui/pagination-table";
 
 export function Transaction() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -136,38 +129,11 @@ export function Transaction() {
                   </p>
 
                   <div>
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            onClick={() =>
-                              setCurrentPage((prev) => Math.max(prev - 1, 1))
-                            }
-                          />
-                        </PaginationItem>
-
-                        {Array.from({ length: totalPages }, (_, index) => (
-                          <PaginationItem key={index}>
-                            <PaginationLink
-                              isActive={currentPage === index + 1}
-                              onClick={() => setCurrentPage(index + 1)}
-                            >
-                              {index + 1}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-
-                        <PaginationItem>
-                          <PaginationNext
-                            onClick={() =>
-                              setCurrentPage((prev) =>
-                                Math.min(prev + 1, totalPages)
-                              )
-                            }
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                    <PaginationTable
+                      currentPage={currentPage}
+                      onPageChange={setCurrentPage}
+                      totalPages={totalPages}
+                    />
                   </div>
                 </div>
               </>
