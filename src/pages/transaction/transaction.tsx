@@ -105,46 +105,36 @@ export function Transaction() {
           onSearchChange={setSearchTerm}
         />
 
-        <Card>
-          <div className="px-4">
-            {transactions.length > 0 ? (
-              <>
-                <Table className="mb-6 w-full lg:table-fixed">
-                  <TableHeader>
-                    <TransactionTableHeaderContent />
-                  </TableHeader>
+        <Card className="px-4">
+          {transactions.length > 0 ? (
+            <>
+              <Table className="mb-6 w-full lg:table-fixed">
+                <TableHeader>
+                  <TransactionTableHeaderContent />
+                </TableHeader>
 
-                  <TableBody>
-                    <TransactionTableBodyContent
-                      transactions={currentTransactions}
-                    />
-                  </TableBody>
-                </Table>
+                <TableBody>
+                  <TransactionTableBodyContent
+                    transactions={currentTransactions}
+                  />
+                </TableBody>
+              </Table>
 
-                <div className="flex w-full justify-between">
-                  <p className="text-muted-foreground">
-                    {currentPage * itemsPerPage - itemsPerPage + 1} a{" "}
-                    {Math.min(currentPage * itemsPerPage, totalTransactions)} de{" "}
-                    {totalTransactions} transações
-                  </p>
-
-                  <div>
-                    <PaginationTable
-                      currentPage={currentPage}
-                      onPageChange={setCurrentPage}
-                      totalPages={totalPages}
-                    />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <NoDataTable
-                title="Nenhuma transação encontrada"
-                description="Começe criando uma nova transação para acompanhar suas finanças."
-                icon={ArrowRightLeft}
+              <PaginationTable
+                itemsPerPage={itemsPerPage}
+                totalItems={totalTransactions}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
               />
-            )}
-          </div>
+            </>
+          ) : (
+            <NoDataTable
+              title="Nenhuma transação encontrada"
+              description="Começe criando uma nova transação para acompanhar suas finanças."
+              icon={ArrowRightLeft}
+            />
+          )}
         </Card>
       </main>
     </div>

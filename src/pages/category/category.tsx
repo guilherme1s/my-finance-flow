@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -98,44 +98,34 @@ export function Category() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        <Card>
-          <div className="px-4">
-            {categories.length > 0 ? (
-              <>
-                <Table className="mb-6 w-full lg:table-fixed">
-                  <TableHeader>
-                    <CategoryTableHeaderContent />
-                  </TableHeader>
+        <Card className="px-4">
+          {categories.length > 0 ? (
+            <>
+              <Table className="mb-6 w-full lg:table-fixed">
+                <TableHeader>
+                  <CategoryTableHeaderContent />
+                </TableHeader>
 
-                  <TableBody>
-                    <CategoryTableBodyContent categories={currentCategories} />
-                  </TableBody>
-                </Table>
+                <TableBody>
+                  <CategoryTableBodyContent categories={currentCategories} />
+                </TableBody>
+              </Table>
 
-                <div className="flex w-full justify-between">
-                  <p className="text-muted-foreground">
-                    {currentPage * itemsPerPage - itemsPerPage + 1} a{" "}
-                    {Math.min(currentPage * itemsPerPage, totalCategories)} de{" "}
-                    {totalCategories} categorias
-                  </p>
-
-                  <div>
-                    <PaginationTable
-                      currentPage={currentPage}
-                      onPageChange={setCurrentPage}
-                      totalPages={totalPages}
-                    />
-                  </div>
-                </div>
-              </>
-            ) : (
-              <NoDataTable
-                title="Nenhuma categoria encontrada"
-                description="Começe criando uma nova categoria para utilizar em suas transações."
-                icon={Tag}
+              <PaginationTable
+                itemsPerPage={itemsPerPage}
+                totalItems={totalCategories}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
               />
-            )}
-          </div>
+            </>
+          ) : (
+            <NoDataTable
+              title="Nenhuma categoria encontrada"
+              description="Começe criando uma nova categoria para utilizar em suas transações."
+              icon={Tag}
+            />
+          )}
         </Card>
       </main>
     </div>
