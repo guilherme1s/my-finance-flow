@@ -34,6 +34,7 @@ export function PaginationTable({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
+              aria-label="previous-page"
               onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
             />
           </PaginationItem>
@@ -51,6 +52,7 @@ export function PaginationTable({
 
           <PaginationItem>
             <PaginationNext
+							aria-label="next-page"
               onClick={() =>
                 onPageChange(Math.min(currentPage + 1, totalPages))
               }
