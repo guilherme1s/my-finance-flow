@@ -3,7 +3,7 @@ import { api } from "@/lib/axios";
 import type { newTransactionFormSchemaType } from "@/pages/transaction/new-transaction-form";
 
 interface Transaction {
-	id: string;
+	id: number;
 	amount: number;
 	category: string;
 	description: string;
@@ -11,7 +11,7 @@ interface Transaction {
 }
 
 export async function editTransaction(
-	id: string,
+	id: number,
 	{ amount, category, description, type }: newTransactionFormSchemaType
 ) {
 	const storageKey = "transactions";

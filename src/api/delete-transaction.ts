@@ -2,14 +2,14 @@ import { isDemo } from "@/env";
 import { api } from "@/lib/axios";
 
 interface Transaction {
-	id: string;
+	id: number;
 	amount: number;
 	category: string;
 	description: string;
 	type: "Receita" | "Despesa";
 }
 
-export async function deleteTransaction(id: string) {
+export async function deleteTransaction(id: number) {
 	const storageKey = "transactions";
 
 	if (isDemo) {

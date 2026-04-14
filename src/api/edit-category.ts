@@ -3,14 +3,14 @@ import { api } from "@/lib/axios";
 import type { newCategoryFormSchemaType } from "@/pages/category/new-category-form";
 
 interface Category {
-	id: string;
+	id: number;
 	name: string;
 	description: string;
 	createdAt: string;
 }
 
 export async function editCategory(
-	id: string,
+	id: number,
 	{ name, description }: newCategoryFormSchemaType
 ) {
 	const storageKey = "categories";

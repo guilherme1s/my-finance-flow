@@ -2,7 +2,7 @@ import { isDemo } from "@/env";
 import { api } from "@/lib/axios";
 
 interface CategoryType {
-	id: string;
+	id: number;
 	name: string;
 	description: string;
 	createdAt: string;
