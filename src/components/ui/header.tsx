@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { ProfileMenu } from "./profile-menu";
+import { isDemo } from "@/env";
 
 export function Header() {
   return (
@@ -22,7 +23,7 @@ export function Header() {
             </div>
 
             <h1 className="text-xl font-semibold text-foreground">
-              MyFinanceFlow
+              {isDemo ? "MyFinanceFlow (Demo)" : "MyFinanceFlow"}
             </h1>
           </NavLink>
           <Separator orientation="vertical" />
