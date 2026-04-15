@@ -93,7 +93,7 @@ export function Category() {
       <main className="flex w-full flex-col gap-4">
         <Input
           placeholder="Buscar categoria..."
-          className="w-md"
+          className="w-auto md:w-sm lg:w-md"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

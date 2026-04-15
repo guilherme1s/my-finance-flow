@@ -22,7 +22,7 @@ export function Header() {
               <LayoutDashboard size={20} />
             </div>
 
-            <h1 className="text-xl font-semibold text-foreground">
+            <h1 className="text-sm xl:text-xl font-semibold text-foreground">
               {isDemo ? "MyFinanceFlow (Demo)" : "MyFinanceFlow"}
             </h1>
           </NavLink>
