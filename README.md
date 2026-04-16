@@ -46,6 +46,18 @@ Aplicação web para gerenciamento financeiro desenvolvida com React e TypeScrip
 - Recharts
 - Vitest, Testing Library e (testes de componente)
 
+## Como rodar o projeto
+- Faça o clone do repositório 
+- Instale as dependências com ```pnpm install```
+- Crie um arquivo .env e adicione:
+```
+VITE_API_URL="http://localhost:3000/"
+VITE_APP_DEMO=false
+```
+- Execute o projeto com ```pnpm run dev```
+- Execute o servidor com ```pnpm run server```
+- Altere para ```VITE_APP_DEMO=true``` caso queira utilizar a versão demosntração
+
 ## Resultados
 
 ### Dashboard
