@@ -44,7 +44,7 @@ Aplicação web para gerenciamento financeiro desenvolvida com React e TypeScrip
 - Axios
 - json-server
 - Recharts
-- Vitest, Testing Library e (testes de componente)
+- Vitest, Testing Library e Happy DOM
 
 ## Como rodar o projeto
 - Faça o clone do repositório 
