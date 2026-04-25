@@ -10,7 +10,7 @@ export function HeaderNavigationMenu({ display }: HeaderNavigationMenuProps) {
   const navItemClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-2 rounded px-4 py-2 transition-colors ${
       isActive
-        ? "bg-primary/10 text-primary"
+        ? "bg-primary/10 dark:bg-primary/20 text-primary"
         : "text-muted-foreground hover:bg-muted hover:text-foreground"
     }`;
 
